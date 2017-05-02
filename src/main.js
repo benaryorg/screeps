@@ -18,7 +18,7 @@ var findStruct = (function(creep,type)
 			structureType: type,
 		}
 	});
-	if(objs.longth > 0)
+	if(objs.length > 0)
 	{
 		return objs[0];
 	}
