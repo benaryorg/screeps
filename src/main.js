@@ -43,16 +43,31 @@ const ROLE_ACTIONS =
 	}),
 	'upgrader': (function(creep)
 	{
-		if(creep.carry.energy < creep.carryCapacity)
+		switch(creep.memory.action)
 		{
-			harvest(creep);
-		}
-		else
-		{
-			const controller = findStruct(creep,STRUCTURE_CONTROLLER);
-			if(creep.upgradeController(controller) == ERR_NOT_IN_RANGE)
+			case "harvest":
 			{
-				creep.moveTo(controller);
+				harvest(creep);
+				if(creep.carry.energy >= creep.carryCapacity)
+				{
+					creep.memory.action = "upgrade";
+				}
+			}
+			case "upgrade":
+			{
+				const controller = findStruct(creep,STRUCTURE_CONTROLLER);
+				if(creep.upgradeController(controller) == ERR_NOT_IN_RANGE)
+				{
+					creep.moveTo(controller);
+				}
+				if(creep.carry.energy <= 0)
+				{
+					creep.memory.action = "harvest";
+				}
+			}
+			default:
+			{
+				creep.memory.action = "harvest";
 			}
 		}
 	}),
