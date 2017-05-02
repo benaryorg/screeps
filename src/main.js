@@ -9,6 +9,21 @@ var harvest = (function(creep)
 	}
 });
 
+var findStruct = (function(creep,type)
+{
+	const objs = creep.room.find(FIND_MY_STRUCTURES,
+	{
+		filter:
+		{
+			structureType: type,
+		}
+	});
+	if(objs.longth > 0)
+	{
+		return objs[0];
+	}
+});
+
 const ROLE_ACTIONS =
 {
 	'harvester': (function(creep)
@@ -19,22 +34,12 @@ const ROLE_ACTIONS =
 		}
 		else
 		{
-			const spawns = creep.room.find(FIND_MY_STRUCTURES,
+			const spawn = findStruct(creep,STRUCTURE_SPAWN);
+			if(creep.transfer(spawn,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
 			{
-				filter:
-				{
-					structureType: STRUCTURE_SPAWN,
-				}
-			});
-			if(spawns.length > 0)
-			{
-				const spawn = spawns[0];
-				if(creep.transfer(spawn,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-				{
-					creep.moveTo(spawn);
-				}
+				creep.moveTo(spawn);
 			}
-        }
+		}
 	}),
 };
 
