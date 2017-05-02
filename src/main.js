@@ -41,6 +41,21 @@ const ROLE_ACTIONS =
 			}
 		}
 	}),
+	'upgrader': (function(creep)
+	{
+		if(creep.carry.energy < creep.carryCapacity)
+		{
+			harvest(creep);
+		}
+		else
+		{
+			const controller = findStruct(creep,STRUCTURE_CONTROLLER);
+			if(creep.upgradeController(controller) == ERR_NOT_IN_RANGE)
+			{
+				creep.moveTo(controller);
+			}
+		}
+	}),
 };
 
 module.exports.loop = (function()
